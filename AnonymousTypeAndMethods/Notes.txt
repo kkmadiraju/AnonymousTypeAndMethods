@@ -1,0 +1,150 @@
+﻿## 1. Anonymous Type
+
+An **anonymous type** is an object created **without explicitly defining a class**. The compiler generates the type automatically.
+
+### Example
+
+```csharp
+var employee = new
+{
+    Id = 101,
+    Name = "Kiran",
+    Department = "IT"
+};
+
+Console.WriteLine(employee.Id);
+Console.WriteLine(employee.Name);
+Console.WriteLine(employee.Department);
+```
+
+**Output:**
+
+```
+101
+Kiran
+IT
+```
+
+### Common use with LINQ
+
+```csharp
+var employees = new[]
+{
+    new { Id = 1, Name = "Alice", Salary = 50000 },
+    new { Id = 2, Name = "Bob", Salary = 60000 }
+};
+
+var result = employees.Select(e => new
+{
+    e.Name,
+    e.Salary
+});
+
+foreach (var item in result)
+{
+    Console.WriteLine($"{item.Name} - {item.Salary}");
+}
+```
+
+---
+
+# 2. Anonymous Method
+
+An **anonymous method** is a method **without a name**, defined using the `delegate` keyword and typically assigned to a delegate.
+
+### Example
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Action greet = delegate ()
+        {
+            Console.WriteLine("Hello from Anonymous Method");
+        };
+
+        greet();
+    }
+}
+```
+
+**Output:**
+
+```
+Hello from Anonymous Method
+```
+
+### Anonymous Method with Parameters
+
+```csharp
+Action<string> greet = delegate (string name)
+{
+    Console.WriteLine($"Hello, {name}");
+};
+
+greet("Kiran");
+```
+
+**Output:**
+
+```
+Hello, Kiran
+```
+
+---
+
+# 3. Equivalent Lambda Expression
+
+Most modern C# code uses **lambda expressions** instead of anonymous methods.
+
+```csharp
+Action<string> greet = name =>
+{
+    Console.WriteLine($"Hello, {name}");
+};
+
+greet("Kiran");
+```
+
+---
+
+# Interview Difference
+
+| Anonymous Type                             | Anonymous Method                                |
+| ------------------------------------------ | ----------------------------------------------- |
+| Creates an object without defining a class | Creates a method without giving it a name       |
+| Uses `new { ... }`                         | Uses `delegate`                                 |
+| Commonly used in LINQ projections          | Commonly used with delegates and event handlers |
+| Compiler generates the type automatically  | Compiler generates the method behind the scenes |
+
+## Real-world interview example
+
+```csharp
+var person = new
+{
+    FirstName = "Kiran",
+    LastName = "Kumar"
+};
+
+Action print = delegate
+{
+    Console.WriteLine($"{person.FirstName} {person.LastName}");
+};
+
+print();
+```
+
+**Expected output:**
+
+```
+Kiran Kumar
+```
+
+### Quick way to remember
+
+* **Anonymous Type** → **No class name**, but you create an object (`new { ... }`).
+* **Anonymous Method** → **No method name**, but you define executable code (`delegate { ... }`).
+* **Lambda Expression** (`=>`) is the modern, shorter syntax that often replaces anonymous methods.
